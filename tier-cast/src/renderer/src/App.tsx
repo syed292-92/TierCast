@@ -15,7 +15,21 @@ function App(): React.JSX.Element {
     ipcHandle();
   }
 
+  const clearL = (): void => {
+    setParagraphs([]);
+  }
 
+  const shuffleL = (): void => {
+    // If the list is empty or has only 1 element, do nothing
+    if(paragraphs.length != 0 && paragraphs.length != 1){
+      // shuffle list
+
+      // Idea: make an array 
+    }else{
+      // do nothing
+    }
+    setParagraphs([]);
+  }
 
   /*
     .map is a built in Javascript method that loops through every element in the array, runs a function on it, and returns a new array of the transformed results.
@@ -30,10 +44,16 @@ function App(): React.JSX.Element {
           Hello
         </p>
 
-        
+        <button onClick={clearL}>
+          Clear List!
+        </button>
+
+        <button onClick={clearL}>
+          Shuffle List!
+        </button>
 
         <button onClick={spawnP}>
-          Click Me!
+          Spawn Para
         </button>
         
         {
