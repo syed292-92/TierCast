@@ -18,24 +18,34 @@ function App(): React.JSX.Element {
   const clearL = (): void => {
     setParagraphs([]);
   }
-
+  
   const shuffleL = (): void => {
-    // If the list is empty or has only 1 element, do nothing
-    if(paragraphs.length != 0 && paragraphs.length != 1){
-      // shuffle list
+    if(paragraphs.length > 1){
+      const n = paragraphs.length;
+      const shuffled: string[] = new Array(n);
+      const used = new Set<number>();
 
-      // Idea: make an array 
-    }else{
-      // do nothing
+      for (let i = 0; i < n; i++) {
+        let currIndex = Math.floor(Math.random() * n);
+
+        // If taken, jump to the next index (wrapping around to 0 using modulus)
+        while (used.has(currIndex)) {
+          currIndex = (currIndex + 1) % n;
+        }
+
+        used.add(currIndex);
+        shuffled[currIndex] = paragraphs[i];
+      }
+      setParagraphs(shuffled);
     }
-    setParagraphs([]);
   }
 
+  
   /*
     .map is a built in Javascript method that loops through every element in the array, runs a function on it, and returns a new array of the transformed results.
 
     TO DO:
-      Make buttons for clearing the list, deleting a specific paragraph, and shuffling the pargraphs
+      Make buttons for deleting a specific paragraph, and shuffling the pargraphs
   */
   return (
     <>
@@ -48,7 +58,7 @@ function App(): React.JSX.Element {
           Clear List!
         </button>
 
-        <button onClick={clearL}>
+        <button onClick={shuffleL}>
           Shuffle List!
         </button>
 
