@@ -5,21 +5,26 @@ function App(): React.JSX.Element {
   // Store an array of paragraphs in state
   const [paragraphs, setParagraphs] = useState<string[]>([]);
 
-  // A function that sends 'ping' via IPC (Inter-Process )
-  const ipcHandle = (): void => window.electron.ipcRenderer.send('ping');
+  // A function that sends IPC stuff 
+  const sendIPC = (channel: string, payload?: unknown): void => {
+    window.electron.ipcRenderer.send(channel, payload);
+  }
 
   const spawnP = (): void => {
     // We create an entirely new array, since that lets React know to re-render the screen, this is because React checks memory addresses, not actual value.
     // We add a new paragraph and keep the previous ones as well 
     setParagraphs((prev) => [...prev, `Paragraph #${prev.length + 1}`]);
-    ipcHandle();
+    sendIPC('list:operation_result', 'Paragraph Added');
   }
 
+  
   const clearL = (): void => {
     setParagraphs([]);
+    sendIPC('list:operation_result', 'List Cleared');
   }
   
   const shuffleL = (): void => {
+    
     if(paragraphs.length > 1){
       const n = paragraphs.length;
       const shuffled: string[] = new Array(n);
@@ -37,15 +42,21 @@ function App(): React.JSX.Element {
         shuffled[currIndex] = paragraphs[i];
       }
       setParagraphs(shuffled);
+
+      sendIPC('list:operation_result', 'List Shuffled');
     }
+  }
+
+  const openWindow = (): void => {
+    
   }
 
   
   /*
     .map is a built in Javascript method that loops through every element in the array, runs a function on it, and returns a new array of the transformed results.
 
-    TO DO:
-      Make buttons for deleting a specific paragraph, and shuffling the pargraphs
+
+
   */
   return (
     <>
@@ -70,7 +81,6 @@ function App(): React.JSX.Element {
           paragraphs.map( 
             // Here we are creating a paragraph element, using the information text, and index to give them their key
             (text, index) => (
-              // 
               <p key={index}>{text}</p>
             )
           )

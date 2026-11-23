@@ -53,6 +53,9 @@ app.whenReady().then(() => {
 
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
+  
+  ipcMain.on('list:operation_result', (_event, message) => console.log(message + ' Successfully!'));
+
 
   createWindow()
 
