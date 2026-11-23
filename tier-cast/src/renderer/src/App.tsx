@@ -5,7 +5,7 @@ function App(): React.JSX.Element {
   // Store an array of paragraphs in state
   const [paragraphs, setParagraphs] = useState<string[]>([]);
 
-  // A function that sends IPC stuff 
+  // A function that sends IPC stuff
   const sendIPC = (channel: string, payload?: unknown): void => {
     window.electron.ipcRenderer.send(channel, payload);
   }
@@ -48,7 +48,11 @@ function App(): React.JSX.Element {
   }
 
   const openWindow = (): void => {
-    
+    sendIPC('window:create');
+  }
+
+  const closeWindow = (): void => {
+    sendIPC('window:close');
   }
 
   
@@ -75,6 +79,14 @@ function App(): React.JSX.Element {
 
         <button onClick={spawnP}>
           Spawn Para
+        </button>
+
+        <button onClick={openWindow}>
+          OpenWindow!
+        </button>
+
+        <button onClick={closeWindow}>
+          CloseWindow!
         </button>
         
         {

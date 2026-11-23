@@ -54,7 +54,39 @@ app.whenReady().then(() => {
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
   
-  ipcMain.on('list:operation_result', (_event, message) => console.log(message + ' Successfully!'));
+  ipcMain.on('list:operation_result', (_event, message) => console.log(message + ' Successfully!'))
+
+  let newWindow: BrowserWindow | null = null;
+
+  ipcMain.on('window:create', () => {
+    
+    if(newWindow && !newWindow.isDestroyed()){
+      newWindow.focus();
+      return
+    }
+
+    newWindow = new BrowserWindow({
+      width: 400,
+      height: 300,
+
+      show: true,
+      // Removes this very gross menu bar at the top of the window
+      autoHideMenuBar: true,
+
+      webPreferences: {
+        preload: join(__dirname, '../preload/index.js'),
+        sandbox: false
+      }
+    })
+    
+    
+  })
+
+  ipcMain.on('window:close', () => {
+    if(newWindow){
+      newWindow.destroy();
+    }
+  })
 
 
   createWindow()
